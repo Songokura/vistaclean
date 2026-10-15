@@ -186,7 +186,7 @@ h1 .l2{font-size:var(--fs2,clamp(40px,min(8.6vw,13svh),128px));letter-spacing:-.
 .tabs{display:flex;justify-content:center;gap:6px;margin:0 auto 30px;padding:4px;border-radius:10px;background:rgba(21,23,27,.06);width:fit-content;max-width:100%}
 .tab{border:0;background:transparent;border-radius:7px;padding:11px 20px;font:600 14.5px/1 var(--ft);color:var(--mute);cursor:pointer;transition:background .25s,color .25s,box-shadow .25s;white-space:nowrap}
 .tab.is-active{background:#fff;color:var(--ink-l);box-shadow:0 2px 8px rgba(21,23,27,.12)}
-.grid{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.grid{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
 .card{display:none;flex-direction:column;background:var(--card);border-radius:var(--rad);overflow:hidden;box-shadow:0 1px 0 rgba(21,23,27,.06),0 14px 36px -20px rgba(21,23,27,.25);min-width:0}
 .card.show{display:flex;animation:cardIn .55s var(--ease) both;animation-delay:calc(var(--i)*.045s)}
 @keyframes cardIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
