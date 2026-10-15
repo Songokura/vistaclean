@@ -208,29 +208,36 @@
   var INTRO = (location.hash.length > 1 || W.pageYOffset > 80 || REDUCED) ? 1 : 0;
   var introStart = 0, ticking = false, lastTs = 0;
   var st = pws.map(function () { return { open: -1, out: {}, txts: null, on: null }; });
+  /* геометрия плит: меряем один раз и при изменении страницы, а не на каждом кадре */
+  var geo = null;
+  function measure() {
+    var y = W.pageYOffset;
+    geo = { kont: kont ? kont.getBoundingClientRect().top + y : null, pw: pws.map(function (pw) {
+      var r = pw.getBoundingClientRect(), nx = pw.nextElementSibling;
+      return { top: r.top + y, h: r.height, nxt: nx ? nx.getBoundingClientRect().top + y : null };
+    }) };
+  }
+  if ("ResizeObserver" in W) new ResizeObserver(function () { geo = null; onScroll(); }).observe(doc.body);
   function put(pw, s, k, v) { if (s.out[k] !== v) { s.out[k] = v; pw.style.setProperty(k, v); } }
   function update(ts) {
     ticking = false;
     var now = typeof ts === "number" ? ts : performance.now();
     var dt = lastTs ? Math.min(64, now - lastTs) : 16.7; lastTs = now;
     var k = 1 - Math.pow(1 - 0.2, dt / 16.7);
-    var H = VH, pageY = W.pageYOffset;
-    var kontTop = kont ? kont.getBoundingClientRect().top : null;
-    var rects = [], nxt = [], i;
-    for (i = 0; i < pws.length; i++) {
-      rects.push(pws[i].getBoundingClientRect());
-      var nx = pws[i].nextElementSibling;
-      nxt.push(nx ? nx.getBoundingClientRect().top : null);
-    }
+    var H = VH, pageY = W.pageYOffset, i;
+    if (!geo) measure();
+    var kontTop = geo.kont === null ? null : geo.kont - pageY;
     var moving = false;
     for (i = 0; i < pws.length; i++) {
-      var pw = pws[i], r = rects[i], s = st[i];
+      var pw = pws[i], g = geo.pw[i], s = st[i];
+      var r = { top: g.top - pageY, bottom: g.top + g.h - pageY, height: g.h };
+      var nxt = { i: g.nxt === null ? null : g.nxt - pageY };
       var near = r.bottom > -H * 0.5 && r.top < H * 1.5;
       var isHero = pw.classList.contains("pw-hero");
       if (!near && !isHero && s.out["--enter"] !== undefined) { continue; }
       var enter = clamp(1 - r.top / H);
       var stay = r.height > H ? clamp(-r.top / (r.height - H)) : 0;
-      var exit = nxt[i] !== null ? clamp(1 - nxt[i] / H) : 0;
+      var exit = nxt.i !== null ? clamp(1 - nxt.i / H) : 0;
       var open;
       if (isHero) open = REDUCED ? 1 : easeOut(INTRO);
       else open = REDUCED ? 1 : easeOut(smooth((enter - 0.2) / 0.64));
@@ -262,6 +269,7 @@
   function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(update); } }
   W.addEventListener("scroll", onScroll, { passive: true });
   W.addEventListener("resize", function () {
+    geo = null;
     if (W.innerWidth !== VW) { VW = W.innerWidth; VH = W.innerHeight; fitText(); }
     else if (!TOUCH) VH = W.innerHeight;
     onScroll();
