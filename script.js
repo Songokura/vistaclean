@@ -1,4 +1,4 @@
-/* Vista Clean Technology. Ванильный JS: плиты и след прохода, меню, якоря, каталог, подбор, форма, языки. */
+/* JIECHI Казахстан. Ванильный JS: плиты и след прохода, меню, якоря, каталог, подбор, форма, языки. */
 (function () {
   "use strict";
   var doc = document, root = doc.documentElement, W = window;
@@ -27,7 +27,7 @@
     "t.self": "Самоходная, однощёточная", "t.self2": "Самоходная, двухщёточная", "t.swscrub": "Самоходная подметально-моечная", "t.ridesw": "Райдер с предварительным подметанием", "t.bigsw": "Подметально-моечная с местом оператора", "c.req": "Цена по запросу", "t.ride": "Райдер с сиденьем, однощёточная",
     "t.ride2": "Райдер с сиденьем, двухщёточная", "t.ride2e": "Райдер, двухщёточная, электроподъём щёток",
     "t.sw": "Ручная подметальная машина", "t.swr": "Подметальная с местом оператора", "t.swc": "Подметальная с закрытой кабиной",
-    "m.open": "Открыть меню", "m.close": "Закрыть меню", "f.wa1": "Заявка с сайта Vista Clean Technology", "pb.card": "Карточка в каталоге"
+    "m.open": "Открыть меню", "m.close": "Закрыть меню", "f.wa1": "Заявка с сайта JIECHI Казахстан", "pb.card": "Карточка в каталоге"
   };
   function snapshotRu() {
     [].forEach.call(doc.querySelectorAll("[data-i]"), function (el) {
@@ -93,7 +93,7 @@
   var WA_NUM = "77713736473";
   var WA = {
     ru: {
-      site: "Пишу с сайта Vista Clean Technology.",
+      site: "Пишу с сайта JIECHI Казахстан.",
       "default": "Здравствуйте! {site} Интересует уборочная техника.",
       hero: "Здравствуйте! {site} Помогите подобрать поломоечную машину под объект: ",
       menu: "Здравствуйте! {site} Интересует уборочная техника.",
@@ -136,14 +136,14 @@
 
   /* ---------- fitText: строки заголовка героя ---------- */
   var h1 = doc.getElementById("h1");
-  function fitLine(sel, prop) {
+  function fitLine(sel, prop, min) {
     var l = h1.querySelector(sel), avail = (h1.parentElement || h1).clientWidth;
     if (!l || !avail) return;
     h1.style.removeProperty(prop);
     var fs = parseFloat(getComputedStyle(l).fontSize), guard = 0;
-    while (guard++ < 30 && l.scrollWidth > avail + 1 && fs > 18) { fs *= 0.95; h1.style.setProperty(prop, fs + "px"); }
+    while (guard++ < 30 && l.scrollWidth > avail + 1 && fs > (min || 18)) { fs *= 0.95; h1.style.setProperty(prop, fs + "px"); }
   }
-  function fitText() { if (!h1) return; fitLine(".l1", "--fs1"); fitLine(".l2", "--fs2"); }
+  function fitText() { if (!h1) return; fitLine(".l1", "--fs1", 11); fitLine(".l2", "--fs2"); }
 
   /* ---------- Меню ---------- */
   var burger = doc.querySelector(".burger"), menu = doc.getElementById("menu");
