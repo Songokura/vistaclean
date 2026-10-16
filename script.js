@@ -38,6 +38,12 @@
       var k = el.getAttribute("data-i-ph");
       if (!(k in RU)) RU[k] = el.getAttribute("placeholder") || "";
     });
+    [["data-i-al", "aria-label"], ["data-i-alt", "alt"]].forEach(function (p) {
+      [].forEach.call(doc.querySelectorAll("[" + p[0] + "]"), function (el) {
+        var k = el.getAttribute(p[0]);
+        if (!(k in RU)) RU[k] = el.getAttribute(p[1]) || "";
+      });
+    });
     RU["meta.title"] = doc.title;
     var md = doc.querySelector('meta[name="description"]');
     RU["meta.desc"] = md ? md.getAttribute("content") : "";
@@ -65,6 +71,13 @@
       var k = el.getAttribute("data-i-ph"), v = d[k] !== undefined ? d[k] : RU[k];
       if (v !== undefined) el.setAttribute("placeholder", v);
     });
+    [["data-i-al", "aria-label"], ["data-i-alt", "alt"]].forEach(function (p) {
+      [].forEach.call(doc.querySelectorAll("[" + p[0] + "]"), function (el) {
+        var k = el.getAttribute(p[0]), v = d[k] !== undefined ? d[k] : RU[k];
+        if (v !== undefined) el.setAttribute(p[1], plain(v));
+      });
+    });
+    specLang(lang);
     if (d["meta.title"]) doc.title = d["meta.title"];
     var md = doc.querySelector('meta[name="description"]');
     if (md && d["meta.desc"]) md.setAttribute("content", d["meta.desc"]);
@@ -77,6 +90,30 @@
     try { localStorage.setItem("vista-lang", lang); } catch (e) {}
     fitText();
     renderPick();
+  }
+  /* ---------- Характеристики карточек: значения без data-i (тип, единицы, страны) ---------- */
+  var SPEC_RU = [];
+  function specNodes() {
+    if (!SPEC_RU.length) {
+      [].forEach.call(doc.querySelectorAll(".c-specs b, .c-full b"), function (el) { SPEC_RU.push([el, el.innerHTML]); });
+    }
+    return SPEC_RU;
+  }
+  function specKk(s) {
+    var P = W.SITE_KK_SPEC || {};
+    var plainS = s.replace(/&nbsp;/g, " ");
+    if (P.phrases && P.phrases[plainS]) return P.phrases[plainS];
+    (P.words || []).forEach(function (w) { s = s.split(w[0]).join(w[1]); });
+    (P.units || []).forEach(function (u) { s = s.split(u[0]).join(u[1]); });
+    if (P.upto) s = s.replace(/до(&nbsp;| )/g, P.upto + "$1");
+    if (P.hour) s = s.replace(/(\d)(&nbsp;| )ч(?![А-яЁё])/g, "$1$2" + P.hour);
+    return s;
+  }
+  function specLang(lang) {
+    specNodes().forEach(function (p) {
+      var v = lang === "kk" ? specKk(p[1]) : p[1];
+      if (p[0].innerHTML !== v) p[0].innerHTML = v;
+    });
   }
   function setLang(lang) { loadLang(lang, function () { applyLang(lang); }); }
   [].forEach.call(doc.querySelectorAll(".lang button"), function (b) {
@@ -128,7 +165,7 @@
     var vars = { model: a.getAttribute("data-model") || "" };
     if (key === "podbor") {
       vars.obj = plain(t("pb.o" + OBJ_IDX[pick.obj]));
-      vars.area = plain(AREA_TXT[pick.area]);
+      vars.area = plain(pick.area === "s1" ? t("pb.a1") : AREA_TXT[pick.area]);
       vars.models = (RECO[pick.obj] && RECO[pick.obj][pick.area] || []).map(function (id) { return "JIECHI " + CAT[id].m; }).join(", ");
     }
     a.setAttribute("href", "https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(waText(key, vars)));
@@ -363,7 +400,8 @@
     var ids = (RECO[pick.obj] && RECO[pick.obj][pick.area]) || [];
     pkRes.innerHTML = ids.map(function (id) {
       var c = CAT[id];
-      return '<div class="pk-card"><b class="pk-m">JIECHI ' + c.m + '</b><span class="pk-t">' + t(c.t) + '</span><span class="pk-s">' + t("sp.w") + ": " + c.s[0] + " · " + t("sp.p") + ": " + c.s[1] + '</span><b class="pk-p">' + (c.ot ? "<i>" + t("c.ot") + "</i> " : "") + c.p.replace(/ /g, "&nbsp;") + "&nbsp;₸</b>" +
+      var sv = LANG === "kk" ? [specKk(c.s[0]), specKk(c.s[1])] : c.s;
+      return '<div class="pk-card"><b class="pk-m">JIESHI ' + c.m + '</b><span class="pk-t">' + t(c.t) + '</span><span class="pk-s">' + t("sp.w") + ": " + sv[0] + " · " + t("sp.p") + ": " + sv[1] + '</span><b class="pk-p">' + (c.ot ? "<i>" + t("c.ot") + "</i> " : "") + c.p.replace(/ /g, "&nbsp;") + "&nbsp;₸</b>" +
         '<a class="lnk" href="#c-' + id + '" data-show="' + id + '"><span>' + t("pb.card") + "</span> <i aria-hidden=\"true\">→</i></a></div>";
     }).join("");
   }
