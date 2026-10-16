@@ -422,6 +422,19 @@
     showModel(a.getAttribute("data-show"));
   });
 
+  /* ---------- Конверсии Google Ads ---------- */
+  var AW = "AW-17866151629/", CV = { tel: "Rll_CMHTlJ8dEM2tn8dC", form: "jI5PCMnYjZ8dEM2tn8dC", contact: "I4EwCLPFlZ8dEM2tn8dC" };
+  function conv(kind) {
+    if (typeof W.gtag !== "function") return;
+    W.gtag("event", "conversion", { send_to: AW + CV[kind], value: 1.0, currency: "USD", transport_type: "beacon" });
+  }
+  W.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
+    var h = a.getAttribute("href") || "";
+    if (/^tel:/i.test(h)) conv("tel");
+    else if (/wa\.me|whatsapp/i.test(h)) conv("contact");
+  }, true);
+
   /* ---------- Форма -> WhatsApp ---------- */
   var form = doc.getElementById("form"), thanks = doc.getElementById("thanks"), ferr = doc.getElementById("ferr");
   if (form) {
@@ -435,6 +448,7 @@
       f.name.setAttribute("aria-invalid", badName ? "true" : "false"); f.phone.setAttribute("aria-invalid", badPhone ? "true" : "false");
       if (badName || badPhone) { if (ferr) ferr.hidden = false; (badName ? f.name : f.phone).focus(); return; }
       if (ferr) ferr.hidden = true;
+      conv("form");
       var lines = [plain(t("f.wa1")), plain(t("f.name")) + ": " + name, plain(t("f.phone")) + ": " + phone];
       if (f.message.value.trim()) lines.push(plain(t("f.msg")) + ": " + f.message.value.trim());
       W.open("https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(lines.join("\n")), "_blank", "noopener");

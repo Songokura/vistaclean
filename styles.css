@@ -438,3 +438,10 @@ html:not(.js) .plate .txt>*{opacity:1;transform:none}
 html:not(.js) .pw{--open:1;--intro:1;--stay:1}
 html:not(.js) .rv{opacity:1;transform:none}
 html:not(.js) .card{display:flex}
+
+/* Сервис: бесплатные услуги */
+.s-free{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:16px auto 0;max-width:620px}
+.s-free b{font-weight:600;color:var(--acc-l);margin-right:2px}
+.s-free span{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(10,20,23,.45);font-size:14px;color:#fff;line-height:1.2}
+.s-free span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acc-l);flex-shrink:0}
+.s-free small{flex-basis:100%;font-size:13px;color:rgba(255,255,255,.72);line-height:1.4}
