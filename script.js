@@ -424,9 +424,15 @@
 
   /* ---------- Конверсии Google Ads ---------- */
   var AW = "AW-17866151629/", CV = { tel: "Rll_CMHTlJ8dEM2tn8dC", form: "jI5PCMnYjZ8dEM2tn8dC", contact: "I4EwCLPFlZ8dEM2tn8dC" };
+  var sentCv = {};
   function conv(kind) {
     if (typeof W.gtag !== "function") return;
-    W.gtag("event", "conversion", { send_to: AW + CV[kind], value: 1.0, currency: "USD", transport_type: "beacon" });
+    // один раз за сеанс на каждый тип; ценность задаётся в настройках конверсии в кабинете
+    var key = "cv-" + kind;
+    if (sentCv[kind]) return;
+    try { if (W.sessionStorage.getItem(key)) return; W.sessionStorage.setItem(key, "1"); } catch (err) {}
+    sentCv[kind] = 1;
+    W.gtag("event", "conversion", { send_to: AW + CV[kind], transport_type: "beacon" });
   }
   W.addEventListener("click", function (e) {
     var a = e.target.closest && e.target.closest("a[href]"); if (!a) return;
