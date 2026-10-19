@@ -27,7 +27,7 @@
     "t.self": "Самоходная, однощёточная", "t.self2": "Самоходная, двухщёточная", "t.swscrub": "Самоходная подметально-моечная", "t.ridesw": "Райдер с предварительным подметанием", "t.bigsw": "Подметально-моечная с местом оператора", "c.req": "Цена по запросу", "t.ride": "Райдер с сиденьем, однощёточная",
     "t.ride2": "Райдер с сиденьем, двухщёточная", "t.ride2e": "Райдер, двухщёточная, электроподъём щёток",
     "t.sw": "Ручная подметальная машина", "t.swr": "Подметальная с местом оператора", "t.swc": "Подметальная с закрытой кабиной",
-    "m.open": "Открыть меню", "m.close": "Закрыть меню", "f.wa1": "Заявка с сайта JIECHI Казахстан", "pb.card": "Карточка в каталоге"
+    "m.open": "Открыть меню", "m.close": "Закрыть меню", "pb.card": "Карточка в каталоге"
   };
   function snapshotRu() {
     [].forEach.call(doc.querySelectorAll("[data-i]"), function (el) {
@@ -441,26 +441,61 @@
     else if (/wa\.me|whatsapp/i.test(h)) conv("contact");
   }, true);
 
-  /* ---------- Форма -> WhatsApp ---------- */
-  var form = doc.getElementById("form"), thanks = doc.getElementById("thanks"), ferr = doc.getElementById("ferr");
+  /* ---------- Форма -> Telegram (LeadBot) ----------
+     Заявка уходит в бота без WhatsApp; «спасибо» показываем только после ответа сервера.
+     Не дошла - показываем телефон и WhatsApp как запасной канал. */
+  var LB = "https://lead-bot.sultan-askarov-kz.workers.dev/e";
+  function sendLead(fields) {
+    if (W.LeadBot && W.LeadBot.submit) return W.LeadBot.submit(fields, { el: form, label: "Отправить заявку", section: "kontakty" });
+    // трекер не загрузился (блокировщик) - шлём сами, без источника визита
+    if (!W.fetch) return Promise.resolve({ ok: false });
+    var body = JSON.stringify({ site: "vistaclean", type: "form", direct: 1, fields: fields, label: "Отправить заявку", section: "kontakty",
+      page: location.pathname + location.hash, lang: root.lang, ts: new Date().toISOString() });
+    return W.fetch(LB, { method: "POST", body: body, headers: { "content-type": "text/plain" } })
+      .then(function (r) { return { ok: r.ok }; }, function () { return { ok: false }; });
+  }
+  var form = doc.getElementById("form"), thanks = doc.getElementById("thanks"), ferr = doc.getElementById("ferr"), ffail = doc.getElementById("ffail");
+  function showThanks() {
+    form.hidden = true;
+    if (thanks) { thanks.hidden = false; try { thanks.focus({ preventScroll: true }); } catch (err) {} }
+  }
   if (form) {
     form.addEventListener("submit", function (e) {
       e.preventDefault();
-      var f = form.elements;
-      if (f.website && f.website.value) { form.hidden = true; if (thanks) thanks.hidden = false; return; }
+      var f = form.elements, btn = form.querySelector('[type="submit"]');
+      if (btn.disabled) return;
+      if (f.website && f.website.value) { showThanks(); return; }
       var name = f.name.value.trim(), phone = f.phone.value.trim();
       var badName = !name, badPhone = phone.replace(/\D/g, "").length < 10;
       f.name.classList.toggle("bad", badName); f.phone.classList.toggle("bad", badPhone);
       f.name.setAttribute("aria-invalid", badName ? "true" : "false"); f.phone.setAttribute("aria-invalid", badPhone ? "true" : "false");
       if (badName || badPhone) { if (ferr) ferr.hidden = false; (badName ? f.name : f.phone).focus(); return; }
       if (ferr) ferr.hidden = true;
-      conv("form");
-      var lines = [plain(t("f.wa1")), plain(t("f.name")) + ": " + name, plain(t("f.phone")) + ": " + phone];
-      if (f.message.value.trim()) lines.push(plain(t("f.msg")) + ": " + f.message.value.trim());
-      W.open("https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(lines.join("\n")), "_blank", "noopener");
-      if (thanks) { thanks.hidden = false; try { thanks.focus({ preventScroll: true }); } catch (err) {} }
-      form.reset();
+      if (ffail) ffail.hidden = true;
+      // поля - на русском, как их увидит менеджер в Telegram, независимо от языка сайта
+      var fields = { name: name, phone: phone, "Объект и задача": f.message.value.trim() };
+      if (!fields["Объект и задача"]) delete fields["Объект и задача"];
+      btn.disabled = true; form.classList.add("is-sending");
+      sendLead(fields).then(function (r) {
+        btn.disabled = false; form.classList.remove("is-sending");
+        if (r && r.ok) { conv("form"); form.reset(); showThanks(); }
+        else if (ffail) ffail.hidden = false;
+      });
     });
+  }
+
+  /* ---------- Cookie-баннер: один раз, выбор помним в localStorage ---------- */
+  var ck = doc.getElementById("cookie");
+  if (ck) {
+    var ckSeen = null; try { ckSeen = localStorage.getItem("vista-cookie"); } catch (err) {}
+    if (!ckSeen) {
+      setTimeout(function () { ck.hidden = false; requestAnimationFrame(function () { ck.classList.add("show"); }); }, 1200);
+      doc.getElementById("cookie-ok").addEventListener("click", function () {
+        try { localStorage.setItem("vista-cookie", "1"); } catch (err) {}
+        ck.classList.remove("show");
+        setTimeout(function () { ck.hidden = true; }, 300);
+      });
+    }
   }
 
   var year = doc.getElementById("year"); if (year) year.textContent = String(new Date().getFullYear());

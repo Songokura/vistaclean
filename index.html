@@ -31,7 +31,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&display=swap">
 <link rel="preload" as="image" href="assets/img/hero-j.webp" media="(min-width: 761px)" fetchpriority="high">
 <link rel="preload" as="image" href="assets/img/hero-j-m.webp" media="(max-width: 760px)" fetchpriority="high">
-<link rel="stylesheet" href="styles.css?v=20261017-2">
+<link rel="stylesheet" href="styles.css?v=20261019-2">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -853,17 +853,18 @@
       <li><b>03</b><div><h3 data-i="kt.s3">Поставка и запуск</h3><p data-i="kt.s3s">Доставка по РК, ввод в эксплуатацию, обучение операторов</p></div></li>
     </ol>
     <div class="kont-grid rv">
-      <form class="form" id="form" novalidate>
+      <form class="form" id="form" novalidate data-lb-direct>
         <h3 data-i="f.h">Оставьте заявку</h3>
         <label><span data-i="f.name">Имя</span><input type="text" name="name" autocomplete="name" required></label>
         <label><span data-i="f.phone">Телефон</span><input type="tel" name="phone" inputmode="tel" autocomplete="tel" placeholder="+7" required></label>
         <label><span data-i="f.msg">Объект и задача</span><textarea name="message" rows="3" data-i-ph="f.msgph" placeholder="Склад 4 000 м², бетонный пол, нужна поломоечная машина"></textarea></label>
         <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
         <p class="ferr" id="ferr" hidden data-i="f.err">Укажите имя и телефон, чтобы мы перезвонили.</p>
-        <button type="submit" class="btn btn-red"><svg width="18" height="18" aria-hidden="true"><use href="#ic-wa"/></svg><span data-i="f.b">Отправить в WhatsApp</span></button>
-        <p class="f-note" data-i="f.note">Заявка откроется в WhatsApp с вашим текстом. Менеджер ответит в рабочее время за 10-15 минут.</p>
+        <p class="ferr" id="ffail" hidden role="alert" data-i="f.fail">Не получилось отправить заявку. Позвоните нам: <a href="tel:+77713736473">+7&nbsp;771&nbsp;373&nbsp;64&nbsp;73</a> или напишите в <a href="https://wa.me/77713736473" target="_blank" rel="noopener" data-wa="form-fail">WhatsApp</a>.</p>
+        <button type="submit" class="btn btn-red"><span data-i="f.b">Отправить заявку</span><svg width="18" height="18" aria-hidden="true"><use href="#ic-arr"/></svg></button>
+        <p class="f-note" data-i="f.note">Менеджер перезвонит в рабочее время за 10-15 минут. Нажимая кнопку, вы соглашаетесь с <a href="privacy.html">политикой конфиденциальности</a> и <a href="terms.html">пользовательским соглашением</a>.</p>
       </form>
-      <div class="thanks" id="thanks" hidden tabindex="-1"><b data-i="f.ok">Спасибо, заявка ушла</b><p data-i="f.oks">Если WhatsApp не открылся, напишите нам на +7 771 373 64 73.</p></div>
+      <div class="thanks" id="thanks" hidden tabindex="-1" role="status"><span class="thanks-ic" aria-hidden="true"><svg width="26" height="26"><use href="#ic-ok"/></svg></span><b data-i="f.ok">Спасибо за заявку!</b><p data-i="f.oks">Менеджер перезвонит вам в рабочее время в течение 10-15 минут.</p></div>
       <div class="kont-list">
         <a class="k-tel" href="tel:+77713736473">+7&nbsp;771&nbsp;373&nbsp;64&nbsp;73</a>
         <a class="k-tel k-tel2" href="tel:+77052996181">+7&nbsp;705&nbsp;299&nbsp;61&nbsp;81</a>
@@ -890,7 +891,7 @@
     <img src="assets/logo-jiechi-dark.svg" alt="Jiechi" width="130" height="28" loading="lazy">
     <p class="foot-txt"><span data-i="ft.1">Официальный дистрибьютор JIECHI в Казахстане - ТОО «Vista Company 2010».</span><br><span data-i="ft.2">Астана · Алматы · Костанай</span></p>
     <a class="foot-ig" href="https://www.instagram.com/vista.clean/" target="_blank" rel="noopener"><svg width="18" height="18" aria-hidden="true"><use href="#ic-ig"/></svg><span>@vista.clean</span></a>
-    <p class="copy">© <span id="year">2026</span> <span data-i="ft.copy">JIECHI Казахстан</span></p>
+    <p class="copy">© <span id="year">2026</span> <span data-i="ft.copy">JIECHI Казахстан</span><span class="foot-legal"><a href="privacy.html" data-i="ft.priv">Политика конфиденциальности</a><a href="terms.html" data-i="ft.terms">Пользовательское соглашение</a></span></p>
   </div>
 </footer>
 
@@ -900,6 +901,11 @@
   <a class="st-ig" href="https://www.instagram.com/vista.clean/" target="_blank" rel="noopener" aria-label="Instagram"><svg width="22" height="22" aria-hidden="true"><use href="#ic-ig"/></svg></a>
 </div>
 
-<script src="script.js?v=20261017-2" defer></script>
+<div class="cookie" id="cookie" hidden role="region" aria-label="Уведомление о cookie" data-i-al="al.cookie">
+  <p data-i="ck.t">Мы используем cookie, чтобы сайт работал и чтобы оценивать эффективность рекламы. Подробнее - в <a href="privacy.html#cookie">политике конфиденциальности</a>.</p>
+  <button type="button" class="btn btn-red" id="cookie-ok" data-i="ck.ok">Понятно</button>
+</div>
+
+<script src="script.js?v=20261019-2" defer></script>
 </body>
 </html>

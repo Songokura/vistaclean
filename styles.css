@@ -340,6 +340,14 @@ h1 .l2{font-size:var(--fs2,clamp(40px,min(8.6vw,13svh),128px));letter-spacing:-.
 .thanks[hidden]{display:none}
 .thanks{background:#fff;border-radius:var(--rad);padding:28px;display:flex;flex-direction:column;gap:8px}
 .thanks b{font:700 24px/1.1 var(--fd)}
+.form[hidden]{display:none}
+.ferr a,.f-note a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.f-note a:hover{color:var(--ink-l)}
+.form.is-sending .btn{opacity:.6;cursor:progress}
+.thanks{align-items:flex-start;padding:clamp(28px,3.4vw,40px)}
+.thanks:focus{outline:none}
+.thanks-ic{display:grid;place-items:center;width:52px;height:52px;border-radius:50%;background:var(--acc);color:#fff;margin-bottom:6px}
+.thanks p{color:var(--mute)}
 .kont-list{display:flex;flex-direction:column;gap:10px;align-items:flex-start;padding-top:6px}
 .k-tel{font:700 clamp(28px,3.4vw,40px)/1.1 var(--fd);letter-spacing:-.02em;transition:color .2s}
 .k-tel2{font-size:clamp(22px,2.4vw,28px);color:var(--mute)}
@@ -361,6 +369,20 @@ h1 .l2{font-size:var(--fs2,clamp(40px,min(8.6vw,13svh),128px));letter-spacing:-.
 .foot-txt{font-size:14px;line-height:1.5}
 .foot-ig{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:#fff}
 .copy{grid-column:1/-1;font-size:13px;color:#7D858F}
+.foot-legal{display:inline-flex;flex-wrap:wrap;gap:6px 20px;margin-left:24px}
+.foot-legal a{color:#A3AAB4;text-decoration:underline;text-underline-offset:2px}
+.foot-legal a:hover{color:#fff}
+@media (max-width:760px){.foot-legal{display:flex;margin:10px 0 0}}
+
+/* ---------- cookie-баннер ---------- */
+.cookie[hidden]{display:none}
+.cookie{position:fixed;left:20px;bottom:20px;z-index:60;width:min(440px,100% - 40px);display:flex;align-items:center;gap:16px;padding:16px 16px 16px 20px;background:#fff;color:var(--ink-l);border-radius:var(--rad);box-shadow:0 18px 44px -12px rgba(0,0,0,.45);font-size:14px;line-height:1.45;opacity:0;transform:translateY(16px);transition:opacity .3s var(--ease),transform .3s var(--ease)}
+.cookie.show{opacity:1;transform:none}
+.cookie a{text-decoration:underline;text-underline-offset:2px}
+.cookie .btn{height:44px;padding:0 20px;flex:0 0 auto}
+@media (max-width:760px){.cookie{left:12px;right:12px;width:auto;bottom:calc(82px + env(safe-area-inset-bottom));padding:14px;gap:12px;font-size:13.5px}}
+@media (prefers-reduced-motion:reduce){.cookie{transition:none}}
+body.menu-open .cookie{visibility:hidden}
 @media (min-width:761px){.foot{padding-bottom:36px}}
 @media (max-width:760px){.foot-in{grid-template-columns:1fr;gap:14px}}
 
@@ -445,3 +467,22 @@ html:not(.js) .card{display:flex}
 .s-free span{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(10,20,23,.45);font-size:14px;color:#fff;line-height:1.2}
 .s-free span::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--acc-l);flex-shrink:0}
 .s-free small{flex-basis:100%;font-size:13px;color:rgba(255,255,255,.72);line-height:1.4}
+
+/* ---------- юридические страницы (privacy.html, terms.html) ---------- */
+.doc-page{background:var(--paper)}
+.doc-hdr{background:var(--ink);color:#fff}
+.doc-hdr .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:var(--hdr)}
+.doc-hdr img{height:26px;width:auto}
+.doc-back{display:inline-flex;align-items:center;gap:8px;font:600 14px/1 var(--ft);color:#C9CED6;padding:10px 0}
+.doc-back:hover{color:#fff}
+.doc-back svg{transform:scaleX(-1)}
+.doc{width:min(860px,100% - 2*var(--gut));margin:0 auto;padding:clamp(36px,6vw,72px) 0 clamp(48px,7vw,96px)}
+.doc h1{display:block;color:var(--ink-l);white-space:normal;font-size:clamp(24px,6.4vw,52px);margin:12px 0 10px}
+.doc .doc-date{color:var(--mute);font-size:14px;margin-bottom:clamp(24px,4vw,40px)}
+.doc h2{font-size:clamp(20px,2.4vw,26px);text-transform:none;letter-spacing:0;line-height:1.2;margin:36px 0 12px;scroll-margin-top:24px}
+.doc p,.doc li{color:#2A2F36;line-height:1.6;margin-bottom:10px}
+.doc ul{padding-left:20px;list-style:disc;margin-bottom:10px}
+.doc a{color:var(--acc2);text-decoration:underline;text-underline-offset:2px}
+.doc .doc-card{background:#fff;border-radius:var(--rad);padding:18px 22px;margin:14px 0}
+.doc .doc-card p{margin-bottom:4px}
+.doc-page .foot{padding-bottom:36px}
