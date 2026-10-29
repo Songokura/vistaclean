@@ -166,7 +166,7 @@
     if (key === "podbor") {
       vars.obj = plain(t("pb.o" + OBJ_IDX[pick.obj]));
       vars.area = plain(pick.area === "s1" ? t("pb.a1") : AREA_TXT[pick.area]);
-      vars.models = (RECO[pick.obj] && RECO[pick.obj][pick.area] || []).map(function (id) { return "JIECHI " + CAT[id].m; }).join(", ");
+      vars.models = (RECO[pick.obj] && RECO[pick.obj][pick.area] || []).map(function (id) { return "JIESHI " + CAT[id].m; }).join(", ");
     }
     a.setAttribute("href", "https://wa.me/" + WA_NUM + "?text=" + encodeURIComponent(waText(key, vars)));
   }, true);
